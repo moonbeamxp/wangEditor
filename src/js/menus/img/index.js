@@ -43,17 +43,21 @@ Image.prototype = {
         const width100 = getRandom('width-100')
         const delBtn = getRandom('del-btn')
 
+        // 滑动调整图片大小变量
+        const widthRange =getRandom('widthRange')
+
         // tab 配置
         const tabsConfig = [
             {
                 title: '编辑图片',
                 tpl: `<div>
-                    <div class="w-e-button-container" style="border-bottom:1px solid #f1f1f1;padding-bottom:5px;margin-bottom:5px;">
+                    <div class="w-e-button-container" style="border-bottom:1px solid #f1f1f1;padding-bottom:5px;margin-bottom:5px;line-height: 20px;">
                         <span style="float:left;font-size:14px;margin:4px 5px 0 5px;color:#333;">最大宽度：</span>
                         <button id="${width30}" class="left">30%</button>
                         <button id="${width50}" class="left">50%</button>
                         <button id="${width100}" class="left">100%</button>
                     </div>
+                    <input type="range" id="${widthRange}" min="1" max="100" style="width:100% !important;">
                     <div class="w-e-button-container">
                         <button id="${delBtn}" class="gray left">删除图片</button>
                     </dv>
@@ -105,6 +109,20 @@ Image.prototype = {
                             }
                             // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
                             return true
+                        }
+                    },
+                    {
+                        selector: '#' + widthRange,
+                        type: 'input',
+                        fn: () => {
+                            const $img = editor._selectedImg
+                            if ($img) {
+                                const $rangeValue = $('#' + widthRange)
+                                const width = $rangeValue.val().trim()
+                                $img.css('max-width', width+'%')
+                            }
+                            // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
+                            return false
                         }
                     }
                 ]
